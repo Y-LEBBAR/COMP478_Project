@@ -5,7 +5,7 @@ Quick sanity test to verify that FairFace dataloaders, GPU, and model setup work
 """
 
 import torch
-from src.dataset import get_dataloaders
+from dataset import get_dataloaders
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
