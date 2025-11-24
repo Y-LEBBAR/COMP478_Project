@@ -27,7 +27,8 @@ class CosReLUSoftmaxLoss(nn.Module):
         adjusted_target = torch.clamp(target_logits - self.m, min=-1.0)
 
         # Replace target positions with adjusted values
-        logits.scatter_(1, labels.view(-1, 1), adjusted_target)
+        logits = logits.scatter(1, labels.view(-1, 1), adjusted_target)
+
 
         # Scale and compute cross-entropy loss
         loss = F.cross_entropy(self.s * logits, labels)

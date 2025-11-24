@@ -5,6 +5,8 @@ Entry point for training and evaluating CosFace variant on FairFace dataset.
 """
 
 import torch
+torch.autograd.set_detect_anomaly(True)  # Enable gradient anomaly detection
+
 from src.dataset import get_dataloaders
 from src.model import FaceNet
 from src.train import train_one_epoch, gradient_check
