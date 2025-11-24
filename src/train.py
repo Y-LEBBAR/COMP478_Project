@@ -47,9 +47,9 @@ def train_one_epoch(model, loader, optimizer, device, epoch=None):
         loss.backward()
 
         # Diagnostic: check classifier gradient norm
-        with torch.no_grad():
-            grad_norm = model.classifier.weight.grad.norm().item()
-        print(f"Classifier weight grad norm: {grad_norm:.6f}")
+        #with torch.no_grad():
+        #    grad_norm = model.classifier.weight.grad.norm().item()
+        #print(f"Classifier weight grad norm: {grad_norm:.6f}")
 
         optimizer.step()
         running_loss += loss.item()
