@@ -1,0 +1,11 @@
+# Ignore virtual environments
+.venv/
+venv/
+
+# OS / IDE files
+__pycache__/
+*.pyc
+.DS_Store
+
+# Dataset cache
+data/
