@@ -25,12 +25,12 @@ def gradient_check(model, loader, device):
     # exit()  # uncomment for one-time test
 
 
-def train_one_epoch(model, loader, optimizer, device, epoch=None):
+def train_one_epoch(model, loader, optimizer, criterion, device, epoch=None):
     """
-    Train model for one epoch using CosReLU Softmax Loss, with gradient diagnostics.
+    Train model for one epoch using the specified loss (CosReLU or Softmax),
+    with optional gradient diagnostics.
     """
     model.train()
-    criterion = CosReLUSoftmaxLoss(s=30, m=0.35)
     running_loss = 0.0
 
     for imgs, labels in tqdm(loader, desc=f"Training Epoch {epoch}", leave=False):
@@ -46,10 +46,10 @@ def train_one_epoch(model, loader, optimizer, device, epoch=None):
         optimizer.zero_grad()
         loss.backward()
 
-        # Diagnostic: check classifier gradient norm
-        #with torch.no_grad():
-        #    grad_norm = model.classifier.weight.grad.norm().item()
-        #print(f"Classifier weight grad norm: {grad_norm:.6f}")
+        # Optional diagnostic
+        # with torch.no_grad():
+        #     grad_norm = model.classifier.weight.grad.norm().item()
+        # print(f"Classifier weight grad norm: {grad_norm:.6f}")
 
         optimizer.step()
         running_loss += loss.item()
