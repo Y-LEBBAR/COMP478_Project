@@ -32,7 +32,11 @@ def run_experiment(model_name, criterion_class, epochs=5, lr=1e-4, batch_size=64
     print(f"\n🚀 Starting {model_name} training on device: {device}")
 
     # Load FairFace small (0.25) dataset
-    train_loader, val_loader = get_dataloaders(batch_size=batch_size, use_hf=True)
+    train_loader, val_loader = get_dataloaders(
+        root_dir=data_root,
+        batch_size=batch_size,
+        use_hf=True   # use Hugging Face loader
+    )
     model = FaceNet(num_classes=7).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = criterion_class()
@@ -89,7 +93,7 @@ def compare_results(cos_results, softmax_results):
 
 
 if __name__ == "__main__":
-
+    data_root = "/content/drive/MyDrive/fairface_cache"  # Google Drive cache
     # Run CosReLU vs Softmax experiments
     cosrelu_results = run_experiment("CosReLU", CosReLUSoftmaxLoss)
     softmax_results = run_experiment("Softmax", SoftmaxLoss)
