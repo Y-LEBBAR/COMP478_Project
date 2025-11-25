@@ -89,13 +89,6 @@ def compare_results(cos_results, softmax_results):
 
 
 if __name__ == "__main__":
-    # Ensure Google Drive is mounted first
-    try:
-        from google.colab import drive
-        drive.mount('/content/drive')
-    except ModuleNotFoundError:
-        print("🖥️ Not running in Colab — skipping Google Drive mount.")
-
 
     # Run CosReLU vs Softmax experiments
     cosrelu_results = run_experiment("CosReLU", CosReLUSoftmaxLoss)
