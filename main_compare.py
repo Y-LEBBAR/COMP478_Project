@@ -42,7 +42,7 @@ def run_experiment(model_name, criterion_class, epochs=5, lr=1e-4, batch_size=64
 
     # Training loop
     for epoch in range(1, epochs + 1):
-        train_loss = train_one_epoch(model, train_loader, optimizer, criterion, device)
+        train_loss = train_one_epoch(model, train_loader, optimizer, criterion, device, epoch)
         overall_acc, group_acc = evaluate(model, val_loader, device)
 
         print(f"[{model_name}] Epoch {epoch}: Loss={train_loss:.4f}, Overall Acc={overall_acc:.3f}")
