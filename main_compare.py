@@ -32,7 +32,7 @@ def run_experiment(model_name, criterion_class, epochs=5, lr=1e-4, batch_size=64
     print(f"\n🚀 Starting {model_name} training on device: {device}")
 
     # Load FairFace small (0.25) dataset
-    train_loader, val_loader = get_dataloaders(root_dir=None, batch_size=batch_size, use_hf=True)
+    train_loader, val_loader = get_dataloaders(batch_size=batch_size, use_hf=True)
     model = FaceNet(num_classes=7).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = criterion_class()
