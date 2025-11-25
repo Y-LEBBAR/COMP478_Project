@@ -13,12 +13,13 @@ from src.dataset import get_dataloaders
 from src.model import FaceNet
 from src.train import train_one_epoch
 from src.evaluate import evaluate
-from src.loss import CosReLUSoftmaxLoss   # existing version
+from src.loss import CosReLUSoftmaxLoss
 from src.loss_baseline import SoftmaxLoss
 import pandas as pd
 import os
 
-# Google Drive mount path
+
+# Google Drive mount path (ensure Drive is mounted in Colab)
 DRIVE_PATH = "/content/drive/MyDrive/FairFace_Results"
 os.makedirs(DRIVE_PATH, exist_ok=True)
 
@@ -31,9 +32,10 @@ def run_experiment(model_name, criterion_class, epochs=5, lr=1e-4, batch_size=64
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"\n🚀 Starting {model_name} training on device: {device}")
 
-    # Load FairFace small (0.25) dataset
+    # Load FairFace-small (0.25) dataset from cached Drive folder
     train_loader, val_loader = get_dataloaders(batch_size=batch_size)
 
+    # Initialize model, optimizer, and loss
     model = FaceNet(num_classes=7).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = criterion_class()
@@ -48,9 +50,9 @@ def run_experiment(model_name, criterion_class, epochs=5, lr=1e-4, batch_size=64
             print(f"  {race}: {acc:.3f}")
         print("")
 
-    # Save model both locally and to Drive
+    # Save models locally and in Google Drive
     local_model_path = f"{model_name}_fairface_small.pth"
-    drive_model_path = os.path.join(DRIVE_PATH, f"{model_name}_fairface_small.pth")
+    drive_model_path = os.path.join(DRIVE_PATH, local_model_path)
     torch.save(model.state_dict(), local_model_path)
     torch.save(model.state_dict(), drive_model_path)
     print(f"✅ Saved model to {drive_model_path}")
@@ -82,18 +84,21 @@ def compare_results(cos_results, softmax_results):
         data.append({"Race": race, "CosReLU": cos_acc, "Softmax": base_acc})
 
     df = pd.DataFrame(data)
-    csv_local = "fairface_small_comparison.csv"
-    csv_drive = os.path.join(DRIVE_PATH, csv_local)
-    df.to_csv(csv_local, index=False)
-    df.to_csv(csv_drive, index=False)
-    print(f"\n✅ Results saved to {csv_drive} for report use.")
+    csv_name = "fairface_small_comparison.csv"
+    csv_drive_path = os.path.join(DRIVE_PATH, csv_name)
+
+    df.to_csv(csv_name, index=False)
+    df.to_csv(csv_drive_path, index=False)
+    print(f"\n✅ Results saved to {csv_drive_path} for report use.")
 
 
 if __name__ == "__main__":
-    data_root = "/content/drive/MyDrive/fairface_cache"  # Google Drive cache
-    # Run CosReLU vs Softmax experiments
+    # Cached dataset path on Google Drive
+    data_root = "/content/drive/MyDrive/fairface_cache"
+
+    # Run both experiments
     cosrelu_results = run_experiment("CosReLU", CosReLUSoftmaxLoss)
     softmax_results = run_experiment("Softmax", SoftmaxLoss)
 
-    # Compare and export
+    # Compare results and export
     compare_results(cosrelu_results, softmax_results)
