@@ -97,8 +97,9 @@ if __name__ == "__main__":
     data_root = "/content/drive/MyDrive/fairface_cache"
 
     # Run both experiments
-    cosrelu_results = run_experiment("CosReLU", CosReLUSoftmaxLoss)
-    softmax_results = run_experiment("Softmax", SoftmaxLoss)
+    cosrelu_results = run_experiment("CosReLU", CosReLUSoftmaxLoss, epochs=10)
+    softmax_results = run_experiment("Softmax", SoftmaxLoss, epochs=10)
+
 
     # Compare results and export
     compare_results(cosrelu_results, softmax_results)
