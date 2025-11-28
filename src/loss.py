@@ -29,7 +29,6 @@ class CosReLUSoftmaxLoss(nn.Module):
         # Replace target positions with adjusted values
         logits = logits.scatter(1, labels.view(-1, 1), adjusted_target)
 
-
         # Scale and compute cross-entropy loss
         loss = F.cross_entropy(self.s * logits, labels)
         return loss
